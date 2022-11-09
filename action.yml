@@ -1,0 +1,31 @@
+# action.yml
+name: 'ClearML compare models'
+description: 'Search ClearML for a task corresponding to the current PR and compare its performance to the previous best task.'
+inputs:
+  CLEARML_API_ACCESS_KEY:
+    description: 'ClearML api access key (can be generated in your profile page)'
+    required: true
+  CLEARML_API_SECRET_KEY:
+    description: 'ClearML api secret key (can be generated in your profile page)'
+    required: true
+  CLEARML_API_HOST:
+    description: 'ClearML server api host'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install ClearML
+      shell: bash
+      run: pip install clearml==1.7.2
+    - name: Start the task
+      shell: bash
+      run: python task_stats_to_comment.py
+      env:
+        CLEARML_API_ACCESS_KEY: ${{ inputs.CLEARML_API_ACCESS_KEY }}
+        CLEARML_API_SECRET_KEY: ${{ inputs.CLEARML_API_SECRET_KEY }}
+        CLEARML_API_HOST: ${{ inputs.CLEARML_API_HOST }}
+    
