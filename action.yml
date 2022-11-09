@@ -27,7 +27,7 @@ runs:
       shell: bash
     - name: Start the task
       shell: bash
-      run: python compare_models.py
+      run: python ${{ github.action_path }}/compare_models.py
       env:
         CLEARML_API_ACCESS_KEY: ${{ inputs.CLEARML_API_ACCESS_KEY }}
         CLEARML_API_SECRET_KEY: ${{ inputs.CLEARML_API_SECRET_KEY }}
