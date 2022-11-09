@@ -23,7 +23,7 @@ runs:
       run: pip install clearml==1.7.2
     - name: Start the task
       shell: bash
-      run: python task_stats_to_comment.py
+      run: python compare_models.py
       env:
         CLEARML_API_ACCESS_KEY: ${{ inputs.CLEARML_API_ACCESS_KEY }}
         CLEARML_API_SECRET_KEY: ${{ inputs.CLEARML_API_SECRET_KEY }}
