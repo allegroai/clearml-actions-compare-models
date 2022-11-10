@@ -1,5 +1,7 @@
 # GitHub Action For Comparing Model Performance Between Current PR and Main Branch
 
+![tags screenshot](images/screenshot.png)
+
 Search ClearML for a task corresponding to the current PR and automatically compare its performance to the previous best task.
 
 The action will identify a ClearML task as "corresponding" to the current PR if:
