@@ -4,8 +4,15 @@ from clearml import Task
 
 def get_clearml_task_of_current_commit(commit_id):
     """Find the ClearML task that correspond to the exact codebase in the commit ID."""
-    # Get the ID and Diff of all tasks based on the current commit hash, order by newest
+    print(
+        f"Querying tasks in project {os.getenv('CLEARML_PROJECT')}"
+        f" with name {os.getenv('CLEARML_TASK_NAME')} on commit hash {commit_id}"
+    )
+    if not os.getenv('CLEARML_PROJECT') or not os.getenv('CLEARML_TASK_NAME'):
+        raise ValueError("Both CLEARML_PROJECT and CLEARML_TASK_NAME have to be set to use specific querying.")
     tasks = Task.query_tasks(
+        project_name=os.getenv('CLEARML_PROJECT'),
+        task_name=os.getenv('CLEARML_TASK_NAME'),
         task_filter={
             'order_by': ['-last_update'],
             '_all_': dict(fields=['script.version_num'],
@@ -31,22 +38,30 @@ def get_clearml_task_of_current_commit(commit_id):
 def compare_and_tag_task(commit_hash):
     """Compare current performance to best previous performance and only allow equal or better."""
     current_task = get_clearml_task_of_current_commit(commit_hash)
-    best_task = Task.get_task(project_name='Github CICD Video', task_name='cicd_test', tags=['Best Performance'])
+    best_task = Task.get_task(
+        project_name=os.getenv('CLEARML_PROJECT'),
+        task_name=os.getenv('CLEARML_TASK_NAME'),
+        tags=[os.getenv('CLEARML_BEST_TAGNAME')]
+    )
     if best_task:
         best_metric = max(
-            best_task.get_reported_scalars().get('Performance Metric').get('Series 1').get('y')
+            best_task.get_reported_scalars()
+            .get(os.getenv('CLEARML_SCALAR_TITLE'))
+            .get(os.getenv('CLEARML_SCALAR_SERIES')).get('y')
         )
         current_metric = max(
-            current_task.get_reported_scalars().get('Performance Metric').get('Series 1').get('y')
+            current_task.get_reported_scalars()
+            .get(os.getenv('CLEARML_SCALAR_TITLE'))
+            .get(os.getenv('CLEARML_SCALAR_SERIES')).get('y')
         )
         print(f"Best metric in the system is: {best_metric} and current metric is {current_metric}")
         if current_metric >= best_metric:
             print("This means current metric is better or equal! Tagging as such.")
-            current_task.add_tags(['Best Performance'])
+            current_task.add_tags([os.getenv('CLEARML_BEST_TAGNAME')])
         else:
             print("This means current metric is worse! Not tagging.")
     else:
-        current_task.add_tags(['Best Performance'])
+        current_task.add_tags([os.getenv('CLEARML_BEST_TAGNAME')])
 
 
 if __name__ == '__main__':

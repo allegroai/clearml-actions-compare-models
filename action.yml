@@ -11,6 +11,20 @@ inputs:
   CLEARML_API_HOST:
     description: 'ClearML server api host'
     required: true
+  CLEARML_PROJECT:
+    description: 'Which project to search in for the task.'
+    required: true
+  CLEARML_TASK_NAME:
+    description: 'Which task name to search for.'
+    required: true
+  CLEARML_SCALAR_TITLE:
+    description: 'Which scalar to use for comparison. Title of the scalar.'
+    required: true
+  CLEARML_SCALAR_SERIES:
+    description: 'Which scalar to use for comparison. Series to use within given plot.'
+  CLEARML_BEST_TAGNAME:
+    description: 'The name of tag to be given to the best task. Every task that is checked and is equal or better than the previous best will get this tag. (default: "Best Performance")'
+    default: 'Best Performance'
 runs:
   using: 'composite'
   steps:
