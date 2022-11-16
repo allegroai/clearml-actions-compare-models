@@ -35,6 +35,7 @@ jobs:
             CLEARML_TASK_NAME: 'my_task'
             CLEARML_SCALAR_TITLE: 'Performance Metrics'
             CLEARML_SCALAR_SERIES: 'mAP'
+            CLEARML_SCALAR_MIN_MAX: 'MAX'
             CLEARML_BEST_TAGNAME: 'GOODEST BOI'
           env:
             COMMIT_ID: ${{ github.event.pull_request.head.sha }}
@@ -49,4 +50,5 @@ jobs:
 5. `CLEARML_TASK_NAME`: Name of the task to compare to the current PR.
 6. `CLEARML_SCALAR_TITLE`: Which scalar to use for comparison. Title of the scalar plot.
 7. `CLEARML_SCALAR_SERIES`: Which scalar to use for comparison. Series to use within plot given by title.
-8. `CLEARML_BEST_TAGNAME`: The name of tag to be given to the best task. Every task that is checked and is equal or better than the previous best will get this tag. (default: "Best Performance")
+8. `CLEARML_SCALAR_MIN_MAX`: Whether smaller is better (MIN) or larger is better (MAX). (default: "MAX")
+9. `CLEARML_BEST_TAGNAME`: The name of tag to be given to the best task. Every task that is checked and is equal or better than the previous best will get this tag. (default: "Best Performance")
