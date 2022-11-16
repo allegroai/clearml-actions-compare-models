@@ -22,6 +22,10 @@ inputs:
     required: true
   CLEARML_SCALAR_SERIES:
     description: 'Which scalar to use for comparison. Series to use within given plot.'
+    required: true
+  CLEARML_SCALAR_MIN_MAX:
+    description: 'Whether smaller is better (MIN) or larger is better (MAX).'
+    default: 'MAX'
   CLEARML_BEST_TAGNAME:
     description: 'The name of tag to be given to the best task. Every task that is checked and is equal or better than the previous best will get this tag. (default: "Best Performance")'
     default: 'Best Performance'
@@ -47,4 +51,5 @@ runs:
         CLEARML_SCALAR_TITLE: ${{ inputs.CLEARML_SCALAR_TITLE }}
         CLEARML_SCALAR_SERIES: ${{ inputs.CLEARML_SCALAR_SERIES }}
         CLEARML_BEST_TAGNAME: ${{ inputs.CLEARML_BEST_TAGNAME }}
+        CLEARML_SCALAR_MIN_MAX: ${{ inputs.CLEARML_SCALAR_MIN_MAX }}
     

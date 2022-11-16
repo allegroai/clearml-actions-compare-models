@@ -55,7 +55,14 @@ def compare_and_tag_task(commit_hash):
             .get(os.getenv('CLEARML_SCALAR_SERIES')).get('y')
         )
         print(f"Best metric in the system is: {best_metric} and current metric is {current_metric}")
-        if current_metric >= best_metric:
+        if os.getenv('CLEARML_SCALAR_MIN_MAX') == 'MIN':
+            flag = current_metric <= best_metric
+        elif os.getenv('CLEARML_SCALAR_MIN_MAX') == 'MAX':
+            flag = current_metric >= best_metric
+        else:
+            raise ValueError(f"Cannot parse value of CLEARML_SCALAR_MIN_MAX: {os.getenv('CLEARML_SCALAR_MIN_MAX')}"
+                             " Should be 'MIN' or 'MAX'")
+        if flag:
             print("This means current metric is better or equal! Tagging as such.")
             current_task.add_tags([os.getenv('CLEARML_BEST_TAGNAME')])
         else:
