@@ -44,30 +44,36 @@ def compare_and_tag_task(commit_hash):
         tags=[os.getenv('CLEARML_BEST_TAGNAME')]
     )
     if best_task:
-        best_metric = max(
+        best_metric = (
             best_task.get_reported_scalars()
             .get(os.getenv('CLEARML_SCALAR_TITLE'))
             .get(os.getenv('CLEARML_SCALAR_SERIES')).get('y')
         )
-        current_metric = max(
+        current_metric = (
             current_task.get_reported_scalars()
             .get(os.getenv('CLEARML_SCALAR_TITLE'))
             .get(os.getenv('CLEARML_SCALAR_SERIES')).get('y')
         )
         print(f"Best metric in the system is: {best_metric} and current metric is {current_metric}")
         if os.getenv('CLEARML_SCALAR_MIN_MAX') == 'MIN':
-            flag = current_metric <= best_metric
+            flag = min(current_metric) <= min(best_metric)*(1+float(os.getenv('CLEARML_SCALAR_THRESHOLD'))/100)
         elif os.getenv('CLEARML_SCALAR_MIN_MAX') == 'MAX':
-            flag = current_metric >= best_metric
+            flag = max(current_metric) >= max(best_metric)*(1-float(os.getenv('CLEARML_SCALAR_THRESHOLD'))/100)
         else:
             raise ValueError(f"Cannot parse value of CLEARML_SCALAR_MIN_MAX: {os.getenv('CLEARML_SCALAR_MIN_MAX')}"
                              " Should be 'MIN' or 'MAX'")
+        print(f"Previous best: {best_metric}")
+        print(f"Current task: {current_metric}")
         if flag:
-            print("This means current metric is better or equal! Tagging as such.")
+            print("Congratulations, you are now the best performing task :)")
+            # Remove the current best task
+            best_task.set_tags([])
+            # Set the current task as the new best task
             current_task.add_tags([os.getenv('CLEARML_BEST_TAGNAME')])
         else:
-            print("This means current metric is worse! Not tagging.")
+            print("Current metric is worse! Not tagging.")
     else:
+        # Set the current task as the new best task
         current_task.add_tags([os.getenv('CLEARML_BEST_TAGNAME')])
 
 

@@ -29,6 +29,9 @@ inputs:
   CLEARML_BEST_TAGNAME:
     description: 'The name of tag to be given to the best task. Every task that is checked and is equal or better than the previous best will get this tag. (default: "Best Performance")'
     default: 'Best Performance'
+  CLEARML_SCALAR_THRESHOLD:
+    description: 'The threshold for the difference between the previous best and the current commit. This should be a percentage of the previous best. E.g. CLEARML_SCALAR_THRESHOLD=3 -> if previous best PR is metric value 100 and CLEARML_SCALAR_MIN_MAX is max, then current PR can have a minimum metric value of 97 while still passing. (default: 0)'
+    default: '0'
 runs:
   using: 'composite'
   steps:
@@ -52,4 +55,5 @@ runs:
         CLEARML_SCALAR_SERIES: ${{ inputs.CLEARML_SCALAR_SERIES }}
         CLEARML_BEST_TAGNAME: ${{ inputs.CLEARML_BEST_TAGNAME }}
         CLEARML_SCALAR_MIN_MAX: ${{ inputs.CLEARML_SCALAR_MIN_MAX }}
+        CLEARML_SCALAR_THRESHOLD: ${{ inputs.CLEARML_SCALAR_THRESHOLD }}
     
