@@ -24,7 +24,7 @@ The relevant performance metric is extracted from both the new task and this pre
 ## Example usage
 
 ```yaml
-name: Compare models
+name: Detect model degradation
 on:
   pull_request:
     branches: [ main ]
