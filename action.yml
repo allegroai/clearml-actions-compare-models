@@ -1,5 +1,5 @@
 # action.yml
-name: 'ClearML compare models'
+name: 'ClearML detect model degradation'
 description: 'Search ClearML for a task corresponding to the current PR and compare its performance to the previous best task.'
 inputs:
   CLEARML_API_ACCESS_KEY:
